@@ -34,7 +34,7 @@ startServer(void) {
 	char command_log[16384];
 	command_log_pos = 0;
 
-	__android_log_write(ANDROID_LOG_ERROR, TAG, "Iniciando servidor");
+	__android_log_write(ANDROID_LOG_INFO, TAG, "Iniciando servidor");
 
 	if ((sockfd = socket(PF_INET, SOCK_STREAM, 0)) == -1)
 		__android_log_write(ANDROID_LOG_ERROR, TAG, "Fatal en socket");
@@ -61,7 +61,7 @@ startServer(void) {
 		if (new_sockfd == -1)
 			__android_log_write(ANDROID_LOG_ERROR, TAG, "Fatal en accpct");
 
-		__android_log_print(ANDROID_LOG_ERROR, TAG,
+		__android_log_print(ANDROID_LOG_INFO, TAG,
 				"server: conexión de %s en puerto %d\n",
 				inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 
@@ -74,7 +74,7 @@ startServer(void) {
 
 			if (strncasecmp(buffer, "adios", 5) == 0) {
 				send(new_sockfd, "Adios!\n", 7, 0);
-				__android_log_print(ANDROID_LOG_ERROR, TAG,
+				__android_log_print(ANDROID_LOG_INFO, TAG,
 						"Conexión finalizada con %s:%d",
 						inet_ntoa(client_addr.sin_addr),
 						ntohs(client_addr.sin_port));
@@ -90,7 +90,7 @@ startServer(void) {
 				host_info = gethostbyname(url);
 
 				if (host_info == NULL) {
-					__android_log_print(ANDROID_LOG_ERROR, TAG,
+					__android_log_print(ANDROID_LOG_WARN, TAG,
 							"Couldn't lookup %s\n",
 							url);
 					char *fail = "No se pudo resolver el nombre de dominio de ";
@@ -104,7 +104,7 @@ startServer(void) {
 					//free(errorMessage);
 				} else {
 					address = (struct in_addr *) (host_info->h_addr);
-					__android_log_print(ANDROID_LOG_ERROR, TAG,
+					__android_log_print(ANDROID_LOG_INFO, TAG,
 							"%s has address %s \n",
 							host_info->h_name, inet_ntoa(*address));
 					char *host = strcat(url, " has address ");
@@ -112,14 +112,14 @@ startServer(void) {
 					addToLog(command_log, strcat(host, "\n"));
 				}
 			}
-			__android_log_print(ANDROID_LOG_ERROR, TAG,
+			__android_log_print(ANDROID_LOG_INFO, TAG,
 					"Recibidos %d bytes mensaje: %s",
 					recv_length, buffer);
 			recv_length = recv(new_sockfd, &buffer, 1024, 0);
 		}
 		close(new_sockfd);
 		close(sockfd);
-		__android_log_write(ANDROID_LOG_ERROR, TAG, "closed");
+		__android_log_write(ANDROID_LOG_INFO, TAG, "closed");
 
 	}
 	return 0;
