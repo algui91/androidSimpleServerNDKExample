@@ -132,6 +132,5 @@ startServer(void) {
 jstring Java_com_elbauldelprogramador_simpleserver_MainActivity_startTelnetSession(
 		JNIEnv* env, jobject thiz) {
 	char *bf = startServer();
-	__android_log_write(ANDROID_LOG_DEBUG, TAG, bf);
 	return (*env)->NewStringUTF(env, bf);
 }

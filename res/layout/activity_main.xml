@@ -29,6 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:onClick="onClick"
-        android:text="Reconectar" />
+        android:text="Conectar" />
 
 </LinearLayout>
