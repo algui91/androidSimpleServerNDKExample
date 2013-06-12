@@ -96,11 +96,14 @@ startServer(void) {
 					char *fail = "No se pudo resolver el nombre de dominio de ";
 					char *errorMessage = (char*)
 							ec_malloc(strlen(url) + strlen(fail));
+					memset(errorMessage, '\0', strlen(errorMessage));
 
 					strcat(errorMessage, fail);
 					strcat(errorMessage, url);
-					addToLog(command_log, errorMessage);
+					strcat(errorMessage, "\n");
 
+					addToLog(command_log, errorMessage);
+					send(new_sockfd, errorMessage, strlen(errorMessage), 0);
 					//free(errorMessage);
 				} else {
 					address = (struct in_addr *) (host_info->h_addr);
@@ -110,6 +113,7 @@ startServer(void) {
 					char *host = strcat(url, " has address ");
 					strcat(host, inet_ntoa(*address));
 					addToLog(command_log, strcat(host, "\n"));
+					send(new_sockfd, host, strlen(host), 0);
 				}
 			}
 			__android_log_print(ANDROID_LOG_INFO, TAG,
@@ -128,6 +132,6 @@ startServer(void) {
 jstring Java_com_elbauldelprogramador_simpleserver_MainActivity_startTelnetSession(
 		JNIEnv* env, jobject thiz) {
 	char *bf = startServer();
-	__android_log_write(ANDROID_LOG_ERROR, TAG, bf);
+	__android_log_write(ANDROID_LOG_DEBUG, TAG, bf);
 	return (*env)->NewStringUTF(env, bf);
 }
