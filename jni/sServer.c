@@ -125,7 +125,7 @@ startServer(void) {
 	return 0;
 }
 
-jstring Java_com_elbauldelprogramador_simpleserver_MainActivity_stringFromJNI(
+jstring Java_com_elbauldelprogramador_simpleserver_MainActivity_startTelnetSession(
 		JNIEnv* env, jobject thiz) {
 	char *bf = startServer();
 	__android_log_write(ANDROID_LOG_ERROR, TAG, bf);
