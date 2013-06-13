@@ -1,3 +1,4 @@
+
 package com.elbauldelprogramador.simpleserver;
 
 import android.app.Activity;
@@ -7,52 +8,51 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-	private static final String TAG = "SimpleServer";
-	private TextView tv = null;
+    private static final String TAG = "SimpleServer";
+    private TextView mTextView;
+    private Button mButton;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		tv = (TextView) findViewById(R.id.textView2);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        mTextView = (TextView) findViewById(R.id.textView2);
+    }
 
-	public void onClick(View target) {
-		switch (target.getId()) {
-		case R.id.button1:
-			
-			tv.setText("Ejecuta 'telnet <ip> 7890' desde el pc");
-			final Button myButton = (Button) findViewById(R.id.button1);
-			myButton.setEnabled(false);
-			
-			new AsyncTask<Void, Void, String>() {
-				@Override
-				protected String doInBackground(Void... params) {
-					return startTelnetSession();
-				}
+    public void onClick(View target) {
+        switch (target.getId()) {
+            case R.id.button1:
 
-				@Override
-				protected void onPostExecute(String result) {
-					tv.setText(result);
-					myButton.setEnabled(true);
-				}
-			}.execute();
+                mTextView.setText("Ejecuta 'telnet <ip> 7890' desde el pc");
+                mButton = (Button) findViewById(R.id.button1);
+                mButton.setEnabled(false);
 
-			break;
+                new AsyncTask<Void, Void, String>() {
+                    @Override
+                    protected String doInBackground(Void... params) {
+                        return startTelnetSession();
+                    }
 
-		default:
-			break;
-		}
-	}
+                    @Override
+                    protected void onPostExecute(String result) {
+                        mTextView.setText(result);
+                        mButton.setEnabled(true);
+                    }
+                }.execute();
 
-	public native String startTelnetSession();
-	
-	static {
-		Log.d(TAG, "libsServer loaded.");
-		System.loadLibrary("sServer");
-	}
+                break;
+            default:
+                break;
+        }
+    }
+
+    public native String startTelnetSession();
+
+    static {
+        Log.d(TAG, "libsServer loaded.");
+        System.loadLibrary("sServer");
+    }
 }
